@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Управління авторами (Панель Бібліотекаря)</h2>
+
+    {% if error %}
+        <p style="color: red; font-weight: bold;">{{ error }}</p>
+    {% endif %}
+
+    <div style="border: 1px solid #ccc; padding: 15px; margin-bottom: 20px;">
+        <h3>Додати нового автора</h3>
+        <form method="POST" action="">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="create">
+            
+            {{ form.as_p }}
+            
+            <button type="submit">Створити</button>
+        </form>
+    </div>
+
+    <h3>Список авторів</h3>
+    <table border="1" cellpadding="10" cellspacing="0">
+        <tr>
+            <th>ID</th>
+            <th>ПІБ</th>
+            <th>Дії</th>
+        </tr>
+        {% for author in authors %}
+            <tr>
+                <td>{{ author.id }}</td>
+                <td>{{ author.surname }} {{ author.name }} {{ author.patronymic }}</td>
+                <td>
+                    <form method="POST" action="" style="display:inline;">
+                        {% csrf_token %}
+                        <input type="hidden" name="action" value="delete">
+                        <input type="hidden" name="author_id" value="{{ author.id }}">
+                        <button type="submit" style="color: red;">Видалити</button>
+                    </form>
+                </td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="3">Авторів поки немає.</td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endblock %}

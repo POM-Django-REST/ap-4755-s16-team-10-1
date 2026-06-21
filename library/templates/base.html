@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Бібліотека</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<div class="container mt-4">
+    <header style="background-color: #f4f4f4; padding: 10px; margin-bottom: 20px;">
+        <nav>
+            <a href="/">Головна (Книги)</a> | 
+            
+            {% if request.user.is_authenticated %}
+                <span>Привіт, {{ request.user.email }}!</span> | 
+                
+                {% if request.user.role == 1 %}
+                    <a href="{% url 'user_list' %}">Користувачі</a> |
+                    <a href="{% url 'add_book' %}">Додати книгу</a> |
+                    <a href="{% url 'authors' %}">Автори</a> |
+                    <a href="{% url 'order_list' %}">Всі замовлення</a> |
+                {% else %}
+                <a href="{% url 'order_list' %}">Мої замовлення</a> |
+                {% endif %}
+                
+                <a href="{% url 'logout' %}">Вийти</a>
+            {% else %}
+                <a href="{% url 'login' %}">Увійти</a> | 
+                <a href="{% url 'register' %}">Реєстрація</a>
+            {% endif %}
+        </nav>
+    </header>
+
+    <main>
+        {% block content %}
+        {% endblock %}
+    </main>
+</div>
+</html>

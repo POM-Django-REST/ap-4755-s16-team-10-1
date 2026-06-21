@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Оформлення замовлення</h2>
+<div style="border: 1px solid #ccc; padding: 15px; max-width: 500px;">
+    <form method="POST">
+        {% csrf_token %}
+        
+        {{ form.as_p }}
+        
+        <button type="submit" style="padding: 10px 20px; background-color: #0d6efd; color: white; border: none; cursor: pointer; margin-top: 15px;">Підтвердити замовлення</button>
+        <a href="{% url 'book_list' %}" style="margin-left: 15px;">Скасувати</a>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Всі користувачі</h2>
+<table border="1">
+    <tr><th>Email</th><th>Роль</th></tr>
+    {% for u in users %}
+    <tr>
+        <td>{{ u.email }}</td>
+        <td>{% if u.role == 1 %}Бібліотекар{% else %}Гість{% endif %}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

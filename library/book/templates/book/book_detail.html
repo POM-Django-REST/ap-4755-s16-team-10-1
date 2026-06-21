@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Деталі книги: {{ book.name }}</h2>
+    
+    <div style="border: 1px solid #ccc; padding: 15px; max-width: 600px;">
+        <p><strong>Опис:</strong> {{ book.description }}</p>
+        <p><strong>Кількість в бібліотеці:</strong> {{ book.count }}</p>
+        
+        <p><strong>Автори:</strong></p>
+        <ul>
+            {% for author in book.authors.all %}
+                <li>{{ author.name }} {{ author.surname }} {{ author.patronymic }}</li>
+            {% empty %}
+                <li>Авторів не вказано</li>
+            {% endfor %}
+        </ul>
+
+        <br>
+        <a href="{% url 'book_list' %}">⬅ Повернутися до списку</a>
+        
+        {% if request.user.is_authenticated %}
+            
+            {% if book.count > 0 %}
+                <a href="{% url 'create_order' book.id %}" style="display:inline-block; margin-top: 20px; padding: 10px 20px; background-color: #28a745; color: white; text-decoration: none; border-radius: 5px;">
+                    Оформити замовлення
+                </a>
+            {% else %}
+                <p style="color: red; margin-top: 20px; font-weight: bold;">На жаль, всі примірники цієї книги зараз на руках.</p>
+            {% endif %}
+
+        {% else %}
+            <p style="margin-top: 20px; padding: 10px; background-color: #f8f9fa; border-left: 4px solid #ffc107;">
+                <em>Щоб замовити книгу, будь ласка, <a href="{% url 'login' %}">увійдіть у систему</a> або <a href="{% url 'register' %}">зареєструйтесь</a>.</em>
+            </p>
+        {% endif %}
+        
+    </div>
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block content %}
+<h2>Список замовлень</h2>
+<table border="1" cellpadding="10">
+    <tr>
+        <th>Книга</th>
+        <th>Користувач</th>
+        <th>Статус</th>
+    </tr>
+    {% for order in orders %}
+    <tr>
+        <td>{{ order.book.name }}</td>
+        <td>{{ order.user.email }}</td>
+        <td>
+            {% if not order.end_at %}
+                Активне 
+                {% if request.user.role == 1 %}
+                    <a href="{% url 'close_order' order.id %}" style="color: green;">[Закрити]</a>
+                {% endif %}
+            {% else %}
+                Закрито ({{ order.end_at|date:"d.m.Y" }})
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

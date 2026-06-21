@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <h2>Список доступних книг</h2>
+    
+    <div style="margin-bottom: 20px;">
+        <form method="GET" action="">
+            <input type="text" name="search" value="{{ search_query }}" placeholder="Пошук за назвою...">
+            <button type="submit">Знайти</button>
+            <a href="{% url 'book_list' %}">Скинути</a>
+        </form>
+    </div>
+
+    <ul>
+        {% for book in books %}
+            <li style="margin-bottom: 15px;">
+                <strong>{{ book.name }}</strong> (В наявності: {{ book.count }} шт.)<br>
+                Автори: 
+                {% for author in book.authors.all %}
+                    {{ author.name }} {{ author.surname }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                    Не вказано
+                {% endfor %}
+                <br>
+                <a href="{% url 'book_detail' book.id %}">Переглянути деталі</a>
+
+                {% if request.user.role == 1 %}
+                    | 
+                    <form method="POST" action="{% url 'delete_book' book.id %}" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit" style="color: red; background: none; border: none; cursor: pointer; text-decoration: underline; padding: 0;">
+                            Видалити книгу
+                        </button>
+                    </form>
+                {% endif %}
+
+            </li>
+        {% empty %}
+            <p>Книг за вашим запитом не знайдено.</p>
+        {% endfor %}
+    </ul>
+{% endblock %}
